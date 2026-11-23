@@ -3,6 +3,7 @@ import { useStore, useAssets, usePortfolio } from '@/store/useStore';
 import { calculatePortfolioHistory } from '@/lib/portfolio';
 import { PortfolioManager } from '../Portfolio';
 import { HistoricalChart } from '../Charts';
+import { ExportButtons } from '../Export';
 
 /**
  * Main Dashboard Layout
@@ -52,7 +53,16 @@ export const Dashboard: React.FC = () => {
         <div className="flex-1 overflow-hidden">
           <div className="bg-white rounded-lg shadow-md p-4 h-full overflow-hidden">
             {hasPortfolio ? (
-              <HistoricalChart data={portfolioHistory.data} />
+              <HistoricalChart
+                data={portfolioHistory.data}
+                actions={
+                  <ExportButtons
+                    assets={assets}
+                    portfolio={portfolio}
+                    history={portfolioHistory}
+                  />
+                }
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center">

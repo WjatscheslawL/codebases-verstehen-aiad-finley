@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -14,6 +14,8 @@ import { DataPoint } from '@/types';
 interface HistoricalChartProps {
   data: DataPoint[];
   title?: string;
+  /** Optional controls shown next to the title (e.g. export buttons) */
+  actions?: ReactNode;
 }
 
 /**
@@ -31,7 +33,7 @@ function downsampleData(data: DataPoint[], maxPoints: number = 500): DataPoint[]
  * Historical Performance Chart
  * Displays portfolio value over time
  */
-export const HistoricalChart: React.FC<HistoricalChartProps> = ({ data, title = 'Portfolio Performance' }) => {
+export const HistoricalChart: React.FC<HistoricalChartProps> = ({ data, title = 'Portfolio Performance', actions }) => {
   // Downsample data for performance
   const displayData = useMemo(() => downsampleData(data), [data]);
 
@@ -54,9 +56,13 @@ export const HistoricalChart: React.FC<HistoricalChartProps> = ({ data, title = 
   }
 
   return (
-    <div className="w-full h-full">
-      <h3 className="text-sm font-semibold text-gray-800 mb-2 px-4">{title}</h3>
-      <ResponsiveContainer width="100%" height="90%">
+    <div className="w-full h-full flex flex-col">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-2 px-4">
+        <h3 className="text-sm font-semibold text-gray-800 pt-2">{title}</h3>
+        {actions}
+      </div>
+      <div className="flex-1 min-h-0">
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           <XAxis
@@ -94,6 +100,7 @@ export const HistoricalChart: React.FC<HistoricalChartProps> = ({ data, title = 
           />
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 };
